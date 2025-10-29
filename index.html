@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReLiCycle | Recycling the Future</title>
+<link href="https://fonts.googleapis.com/css2?family=Recursive:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* --- Reset & Base --- */
+*{ padding:0; margin:0; box-sizing:border-box; scroll-behavior: smooth; }
+body{ font-family: 'Recursive', sans-serif; background:#000; color:#fff; overflow-x:hidden; }
+
+/* --- Container & Navbar --- */
+.container{ max-height:100vh; width:100%; background:linear-gradient(135deg,#131414 0%,#000 100%); transform-style: preserve-3d; overflow:hidden; }
+.navbar{ position:fixed; top:0; left:0; width:100%; z-index:10; height:5rem; }
+.menu{ max-width:72rem; width:100%; height:100%; margin:0 auto; padding:0 2rem; display:flex; justify-content:space-between; align-items:center; color:#fff; }
+.logo{ font-size:1.8rem; font-weight:600; text-transform:uppercase; letter-spacing:2px; line-height:4rem; }
+.logo span{ color:#00ff99; }
+
+/* Hamburger */
+.hamburger-menu{ height:4rem; width:3rem; cursor:pointer; display:flex; align-items:center; justify-content:flex-end; }
+.bar{ width:1.9rem; height:1.5px; border-radius:2px; background-color:#eee; transition:0.5s; position:relative; }
+.bar::before, .bar::after{ content:""; position:absolute; width:inherit; height:inherit; background-color:#eee; transition:0.5s; }
+.bar::before{ transform: translateY(-9px); }
+.bar::after{ transform: translateY(9px); }
+.container.active .bar{ background-color:transparent; }
+.container.active .bar::before{ transform: translateY(0) rotate(45deg); }
+.container.active .bar::after{ transform: translateY(0) rotate(-45deg); }
+
+/* Main & 3D Effect */
+.main-container{ overflow:hidden; }
+.main{ position:relative; width:100%; left:0; z-index:5; overflow:hidden; transform-origin:left; transform-style: preserve-3d; transition:0.5s; }
+header{ min-height:100vh; width:100%; background:url("https://images.unsplash.com/photo-1604319992770-185a28cdb425?auto=format&fit=crop&w=1950&q=80") no-repeat center/cover; position:relative; }
+.overlay{ position:absolute; width:100%; height:100%; top:0; left:0; background-color: rgba(0,0,0,0.6); display:flex; justify-content:center; align-items:center; flex-direction:column; text-align:center; padding:0 1rem; }
+.title{ font-size:3rem; margin-bottom:1rem; letter-spacing:2px; }
+.description{ font-size:1.3rem; max-width:700px; margin:0 auto 2rem; }
+.btn{ padding:0.8rem 2rem; background:linear-gradient(90deg,#00ff99,#00b8ff); border:none; border-radius:25px; color:#000; text-transform:uppercase; text-decoration:none; font-weight:600; transition:0.3s; }
+.btn:hover{ transform:scale(1.05); }
+
+/* 3D Page Animation */
+.container.active .main{ animation: main-animation 0.5s ease; cursor:pointer; transform: perspective(1300px) rotateY(20deg) translateY(10px) translateZ(310px) scale(0.5); }
+@keyframes main-animation{ from{transform:translate(0);} to{transform: perspective(1300px) rotateY(20deg) translateY(10px) translateZ(310px) scale(0.5);} }
+
+.shadow{ position:absolute; width:100%; height:100vh; top:0; left:0; transform-style: preserve-3d; transform-origin:left; transition:0.5s; background-color:#fff; }
+.shadow.one{ z-index:-1; opacity:0.15; }
+.shadow.two{ z-index:-2; opacity:0.1; }
+.container.active .shadow.one{ transform: perspective(1300px) rotateY(20deg) translateY(10px) translateZ(215px) scale(0.5); }
+.container.active .shadow.two{ transform: perspective(1300px) rotateY(20deg) translateY(10px) translateZ(120px) scale(0.5); }
+.container.active .main:hover + .shadow.one{ transform: perspective(1300px) rotateY(20deg) translateY(10px) translateZ(230px) scale(0.5);}
+.container.active .main:hover{ transform: perspective(1300px) rotateY(20deg) translateY(10px) translateZ(340px) scale(0.5);}
+
+/* Links */
+.links{ position:absolute; width:30%; right:0; top:0; height:100vh; z-index:2; overflow:hidden; display:flex; justify-content:center; align-items:center; flex-direction:column; }
+ul{ list-style:none; }
+ul li a{ text-decoration:none; color:#eee; padding:0.7rem 0; display:block; font-size:1.8rem; text-transform:uppercase; letter-spacing:1px; transition:0.3s; opacity:0; transform:translateY(10px); animation: hide 0.5s forwards ease; }
+ul li a:hover{ color:#00ff99; }
+.container.active .links a{ animation: appear 0.5s forwards ease var(--i); }
+@keyframes appear{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+@keyframes hide{ from{opacity:1; transform:translateY(0);} to{opacity:0; transform:translateY(10px);} }
+
+/* Sections */
+section{ padding:6rem 10%; background-color:#0b0b0b; border-top:1px solid #111;}
+section:nth-child(even){ background-color:#111;}
+section h2{ font-size:2.5rem; margin-bottom:1.5rem; color:#00ff99; text-transform:uppercase; letter-spacing:2px; }
+section p{ font-size:1.1rem; line-height:1.8; color:#ccc; max-width:900px; margin-bottom:1rem; }
+
+/* Team */
+.team-members{ display:flex; flex-wrap:wrap; gap:2rem; margin-top:2rem;}
+.member{ background-color:#1b1b1b; padding:1.5rem; border-radius:10px; flex:1 1 250px; text-align:center; transition:0.3s;}
+.member:hover{ background-color:#222; transform:scale(1.03);}
+.member img{ width:100px; height:100px; border-radius:50%; margin-bottom:1rem; border:2px solid #00ff99;}
+.member h4{ margin-bottom:0.3rem; color:#fff;}
+.member span{ color:#00b8ff; font-size:0.9rem;}
+
+/* Contact */
+.contact-form{ margin-top:2rem; max-width:600px; display:flex; flex-direction:column; gap:1rem;}
+input,textarea{ padding:0.8rem 1rem; border:none; border-radius:8px; background:#222; color:#fff; outline:none;}
+input:focus,textarea:focus{ border:1px solid #00ff99;}
+button{ padding:0.8rem; background:linear-gradient(90deg,#00ff99,#00b8ff); border:none; border-radius:20px; color:#000; text-transform:uppercase; font-weight:600; cursor:pointer; transition:0.3s;}
+button:hover{ transform:scale(1.05); }
+
+/* Footer */
+footer{ text-align:center; padding:2rem; background:#000; color:#666; border-top:1px solid #111; font-size:0.9rem; }
+
+@media (max-width:768px){
+  .title{ font-size:2.2rem;}
+  .description{ width:90%; font-size:1rem;}
+  .links{ width:70%;}
+}
+</style>
+</head>
+<body>
+
+<div class="container" id="home">
+  <div class="navbar">
+    <div class="menu">
+      <h3 class="logo">Re<span>LiCycle</span></h3>
+      <div class="hamburger-menu">
+        <div class="bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-container">
+    <div class="main">
+      <header>
+        <div class="overlay">
+          <h2 class="title">ReLiCycle</h2>
+          <p class="description">A student-led startup that’s not just recycling batteries, but recycling the future of clean energy</p>
+          <a href="#about" class="btn" id="know-more-btn">Know More</a>
+        </div>
+      </header>
+    </div>
+    <div class="shadow one"></div>
+    <div class="shadow two"></div>
+  </div>
+
+  <div class="links">
+    <ul>
+      <li><a href="#home" style="--i:0.05s">Home</a></li>
+      <li><a href="#about" style="--i:0.1s">About</a></li>
+      <li><a href="#process" style="--i:0.15s">Process</a></li>
+      <li><a href="#team" style="--i:0.2s">Team</a></li>
+      <li><a href="#contact" style="--i:0.25s">Contact</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- About -->
+<section id="about">
+<h2>About Us</h2>
+<p>ReLiCycle is a student-led clean energy startup focused on safe, efficient, and eco-conscious recycling of lithium-ion batteries. Our mission is to minimize e-waste and maximize the recovery of valuable metals through innovative hydrometallurgical processes.</p>
+</section>
+
+<!-- Process -->
+<section id="process">
+<h2>Our Process</h2>
+<p>Our process is designed for high efficiency and environmental responsibility:</p>
+<p>🔹 <b>Collection & Sorting</b>: Discharge and safely sort end-of-life batteries.</p>
+<p>🔹 <b>Mechanical Processing</b>: Shredding, sieving, and air classification to separate black mass and casings.</p>
+<p>🔹 <b>Leaching & Purification</b>: Extract metals with controlled acid leaching and selective precipitation.</p>
+<p>🔹 <b>Metal Recovery</b>: Recover valuable metals like Lithium, Nickel, and Cobalt for reuse.</p>
+<p>🔹 <b>Cathode manufacturing</b>: In house manufacturing of li-ion battery cathode</p>
+<p>🔹 <b>Cell manufacturing</b>: Full scale manufacturing of li-ion cells</p>
+</section>
+
+<!-- Team -->
+<section id="team">
+<h2>Our Team</h2>
+<p>Meet the innovators behind ReLiCycle — combining science, engineering, and sustainability to make a difference.</p>
+<div class="team-members">
+  <div class="member"><img src="image.jpg" alt="Founder"><h4>H Nidhish Sheka</h4><span>Operations & Strategy</span></div>
+  <div class="member"><img src="image.jpg" alt="Co-Founder"><h4>Ankit Cherian Deepak</h4><span>Technical head</span></div>
+  <div class="member"><img src="image.jpg" alt="R&D Lead"><h4>Isaam Sheik</h4><span>Research Lead</span></div>
+</div>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+<h2>Contact Us</h2>
+<p>Want to collaborate or learn more? Reach out — we’d love to hear from you!</p>
+<form class="contact-form">
+  <input type="text" placeholder="Your Name" required>
+  <input type="email" placeholder="Your Email" required>
+  <textarea rows="5" placeholder="Your Message"></textarea>
+  <button type="submit">Send Message</button>
+</form>
+</section>
+
+<footer> <b>R</b>e<b>L</b>i<b>C</b>ycle</footer>
+<footer>YOU CAN RELY ON US</footer>
+
+<script>
+// Hamburger toggle
+const hamburger_menu = document.querySelector(".hamburger-menu");
+const container = document.querySelector(".container");
+hamburger_menu.addEventListener("click",()=>container.classList.toggle("active"));
+
+// Smooth scroll from Know More button
+document.getElementById("know-more-btn").addEventListener("click",function(e){
+  e.preventDefault();
+  document.getElementById("about").scrollIntoView({ behavior: "smooth" });
+});
+</script>
+</body>
+</html>
